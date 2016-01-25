@@ -101,7 +101,7 @@ export default class Piece {
     //get (roughly) center tile position for the piece
     // @TODO consider if should use Math.floor instead of Math.round
     get_center_pos() {
-        return [Math.round(this.size[0] / 2), Math.round(this.size[1] / 2)];
+        return [Math.floor(this.size[0] / 2), Math.floor(this.size[1] / 2)];
     }
 
     add_perimeter(p_from, p_to, facing) {
@@ -153,7 +153,11 @@ export default class Piece {
         for (let y = 0; y < this.size[1]; y ++) {
             let row ='';
             for (let x = 0; x < this.size[0]; x++) {
-                row += this.walls.get([x, y]) ? 'x' : '0';
+                if (this.start_pos && this.start_pos[0] === x && this.start_pos[1] === y) {
+                    row += 's';
+                } else {
+                    row += this.walls.get([x, y]) ? 'x' : ' ';
+                }
             }
             console.log(row);
         }

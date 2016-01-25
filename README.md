@@ -7,7 +7,7 @@ This is a procedural dungeon generator written in javascript.
 1. Pre-defined, tagged rooms
 2. Highly configurable
 3. Seeded rng
-5. 
+5. Feedback about exits, perimeter, etc
 4. (Optional) corridors
 5. (Optional) circular paths
 

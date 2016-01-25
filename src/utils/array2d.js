@@ -21,28 +21,15 @@ export default class Array2d {
         }
     }
 
-    check_pos_valid([x, y]) {
-        if (x < 0 || x >= this.size[0]) {
-            throw new Error(`Array2d.get coordinates out of bounds. Pos: ${x},${y}, size: ${this.size}`);
-        }
-        if (y < 0 || y >= this.size[1]) {
-            throw new Error(`Array2d.get coordinates out of bounds. Pos: ${x},${y}, size: ${this.size}`);
-        }
-    }
-
     get([x, y]) {
-        this.check_pos_valid([x, y]);
+        if (this.rows[y] === undefined) {
+            return undefined;
+        }
         return this.rows[y][x];
     }
 
     set([x, y], val) {
-        this.check_pos_valid([x, y]);
-        try {
-            this.rows[y][x] = val;
-        } catch (e) {
-            console.error('error array2d set', x, y, e.stack);
-            throw e;
-        }
+        this.rows[y][x] = val;
     }
 
     set_horizontal_line([start_x, start_y], delta_x, val) {

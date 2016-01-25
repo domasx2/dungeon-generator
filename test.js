@@ -1,9 +1,9 @@
-import Dungeon from  './index';
+import Dungeon from  './src/generators/dungeon';
 
 let dungeon = new Dungeon({
-    size: [1000, 1000],
-    room_count: 20,
-    interconnects: 5
+    size: [20, 20],
+    room_count: 50,
+    interconnects: 0
 });
 
 dungeon.generate();

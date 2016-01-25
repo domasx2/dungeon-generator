@@ -30,7 +30,7 @@ export default class Generator extends Piece {
     trim() {
         this.size = [this.maxx - this.minx, this.maxy - this.miny];
         this.children.forEach(child => {
-            child.position = [child.position - this.minx, child.position[1] - this.miny];
+            child.position = [child.position[0] - this.minx, child.position[1] - this.miny];
         });
 
         this.start_pos = [this.start_pos[0] - this.minx, this.start_pos[1] - this.miny];
@@ -52,7 +52,7 @@ export default class Generator extends Piece {
         for (x = 0; x < piece.size[0]; x++) {
             for (y = 0; y < piece.size[1]; y++) {
                 p = this.walls.get([position[0] + x, position[1] + y]);
-                if (p === false || p === null) {
+                if (p === false || p === null || p === undefined) {
                     return false;
                 }
             }

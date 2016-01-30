@@ -134,6 +134,7 @@ export default class Dungeon extends Generator {
                             //rooms can be joined directly
                             } else {
                                 this.join_exits(room2, perims[hash][0], room, exit);
+                                return true;
                             }
                         }
 

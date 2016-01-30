@@ -24,7 +24,7 @@ export default class Room extends Piece {
             this.add_perimeter([1, this.size[1] - 1], [this.size[0] - 2, this.size[1] - 1], 0);
             this.add_perimeter([this.size[0] - 1, 1], [this.size[0] - 1, this.size[1] - 2], 270);
         } else { //only middle of each wall can be exit
-            let {w, h} = this.get_center_pos();
+            let [w, h] = this.get_center_pos();
 
             this.perimeter = [
                 [[w, 0], 180],

@@ -157,7 +157,7 @@ export default class Dungeon extends Generator {
         let room = new Room({
             size: this.random.vec(opts.min_size, opts.max_size),
             max_exits: opts.max_exits,
-            symmetric_rooms: this.symmetric_rooms,
+            symmetric: this.symmetric_rooms,
             tag: key
         });
 

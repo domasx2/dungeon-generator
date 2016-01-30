@@ -1,6 +1,8 @@
 # Dungeon generator
 
-This is a procedural dungeon generator written in javascript.
+This is a procedural dungeon generator written in javascript.  
+
+[Live demo](http://domasx2.github.io/dungeon-generator/)
 
 ## Features
 
@@ -11,6 +13,12 @@ This is a procedural dungeon generator written in javascript.
 4. (Optional) corridors
 5. (Optional) circular paths
 
+
+## Output examples
+
+![Sample 1](http://domasx2.github.io/dungeon-generator/samples/sample1.png)
+![Sample 2](http://domasx2.github.io/dungeon-generator/samples/sample2.png)
+![Sample 3](http://domasx2.github.io/dungeon-generator/samples/sample3.png)
 
 ## Usage
 

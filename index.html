@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Dungeon Generator</title>
+    </head>
+    <body>
+        <div id="editor">
+{
+    "size": [100, 100],
+    "rooms": {
+        "initial": {
+            "min_size": [3, 3],
+            "max_size": [3, 3],
+            "max_exits": 1
+        },
+        "any": {
+            "min_size": [2, 2],
+            "max_size": [5, 5],
+            "max_exits": 4
+        }
+    },
+    "max_corridor_length": 6,
+    "min_corridor_length": 2,
+    "corridor_density": 0.5,
+    "symmetric_rooms": false,
+    "interconnects": 1,
+    "max_interconnect_length": 10,
+    "room_count": 20
+}
+        </div>
+        <div id="canvas_wrap">
+            <button id="generate_btn">Generate</button>
+            <canvas id="canvas"></canvas>
+        </div>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.2.3/ace.js"></script>
+        <script src="/bundle.js"></script>
+    </body>
+</html>

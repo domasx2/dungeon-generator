@@ -19,6 +19,7 @@ This is a procedural dungeon generator written in javascript.
 ![Sample 1](http://domasx2.github.io/dungeon-generator/samples/sample1.png)
 ![Sample 2](http://domasx2.github.io/dungeon-generator/samples/sample2.png)
 ![Sample 3](http://domasx2.github.io/dungeon-generator/samples/sample3.png)
+![Sample 4](http://domasx2.github.io/dungeon-generator/samples/sample4.png)
 
 ## Usage
 

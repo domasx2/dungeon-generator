@@ -1,12 +1,19 @@
-var webpack = require('webpack');
-var path = require('path');
+"use strict";
+
+const webpack = require('webpack');
+const path = require('path');
+
+const build = process.env.BUILD;
+
+let entry = ['./app/index.js'];
+
+if (build === 'dev') {
+    entry.unshift('webpack/hot/only-dev-server');
+    entry.unshift('webpack-dev-server/client?http://0.0.0.0:8080');
+}
 
 module.exports = {
-    entry: [
-    'webpack-dev-server/client?http://0.0.0.0:8080', // WebpackDevServer host and port
-    'webpack/hot/only-dev-server',
-    './app/index.js' // Your appʼs entry point
-  ],
+    entry: entry,
     devtool: process.env.WEBPACK_DEVTOOL || 'source-map',
     output: {
         path: path.join(__dirname),

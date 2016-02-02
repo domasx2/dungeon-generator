@@ -42,28 +42,44 @@ export default class Dungeon extends Generator {
         this.corridors = [];
     }
 
-    add_room(room, exit) {
+    add_room(room, exit, add_to_room=null) {
+        let g_add_to_room = add_to_room;
         //add a new piece, exit is local perimeter pos for that exit;
         let choices, old_room, i = 0;
         while (true) {
             //pick a placed room to connect this piece to
-            choices = this.get_open_pieces(this.children);
-            if (choices) {
-                old_room = this.random.choose(choices);
-                //pick random perimeter piece if exit not specified
-                if (!exit) {
-                    exit = this.random.choose(room.perimeter);
+            if (add_to_room) {
+                old_room = add_to_room;
+                add_to_room = null;
+            } else {
+                choices = this.get_open_pieces(this.children);
+                if (choices && choices.length) {
+                    old_room = this.random.choose(choices);
+                } else {
+                    console.log('ran out of choices connecting');
+                    break;
                 }
-
+            }
+            
+            //if exit is specified, try joining  to this specific exit
+            if (exit) {
                 //try joining the rooms
                 if (this.join(old_room, exit, room)) {
-                    break;
+                    return true;
+                }
+            //else try all perims to see
+            } else {
+                let perim = room.perimeter.slice();
+                while (perim.length) {
+                    if (this.join(old_room, this.random.choose(perim, true), room)) {
+                        return true;
+                    }
                 }
             }
 
             if (i++ === 100) {
-                console.log('failed to connect 100 times :(');
-                break;
+                console.log('failed to connect 100 times :(', room, exit, g_add_to_room);
+                return false;
             }
         }
     }
@@ -182,8 +198,15 @@ export default class Dungeon extends Generator {
             k = this.random.int(1, no_rooms + no_corridors);
             if (k <= no_corridors) {
                 let corridor = this.new_corridor();
-                this.add_room(corridor, corridor.perimeter[0]);
+                let added = this.add_room(corridor, corridor.perimeter[0]);
                 no_corridors --;
+
+                //try to connect to this corridor next
+                if (no_rooms > 0 && added) {
+                    this.add_room(this.new_room(), null, corridor);
+                    no_rooms --;
+                }
+
             } else {
                 this.add_room(this.new_room());
                 no_rooms --;
@@ -194,7 +217,7 @@ export default class Dungeon extends Generator {
             this.add_interconnect();
         }
 
-        this.trim();
+       // this.trim();
 
         if (this.initial_room) {
             this.start_pos = this.initial_room.global_pos(this.initial_room.get_center_pos());

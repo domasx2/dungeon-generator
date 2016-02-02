@@ -35,7 +35,8 @@ let dungeon = new Dungeon({
         initial: {
             min_size: [3, 3],
             max_size: [3, 3],
-            max_exits: 1
+            max_exits: 1,
+            position: [0, 0] //OPTIONAL pos of initial room 
         },
         any: {
             min_size: [2, 2],

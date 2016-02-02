@@ -190,7 +190,7 @@ export default class Dungeon extends Generator {
             room = this.new_room(this.options.rooms.initial ? 'initial' : undefined),
             no_corridors = Math.round(this.corridor_density * no_rooms);
 
-        this.add_piece(room, this.get_center_pos());
+        this.add_piece(room, this.options.rooms.initial && this.options.rooms.initial.position ? this.options.rooms.initial.position :  this.get_center_pos());
 
         let k;
 
@@ -217,7 +217,7 @@ export default class Dungeon extends Generator {
             this.add_interconnect();
         }
 
-       // this.trim();
+        this.trim();
 
         if (this.initial_room) {
             this.start_pos = this.initial_room.global_pos(this.initial_room.get_center_pos());

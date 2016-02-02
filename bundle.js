@@ -64,7 +64,8 @@
 	var editor = undefined;
 	
 	var COLOR_EMPTY = '#FFFF80',
-	    COLOR_WALL = '#808080';
+	    COLOR_WALL = '#808080',
+	    COLOR_START_POS = 'red';
 	
 	function generate() {
 	    var code = editor.getValue(),
@@ -83,7 +84,7 @@
 	
 	    for (var x = 0; x < dungeon.size[0]; x++) {
 	        for (var y = 0; y < dungeon.size[1]; y++) {
-	            ctx.fillStyle = dungeon.walls.get([x, y]) ? COLOR_WALL : COLOR_EMPTY;
+	            ctx.fillStyle = dungeon.start_pos && dungeon.start_pos[0] === x && dungeon.start_pos[1] === y ? COLOR_START_POS : dungeon.walls.get([x, y]) ? COLOR_WALL : COLOR_EMPTY;
 	            ctx.fillRect(x * cell_width, y * cell_width, cell_width, cell_width);
 	        }
 	    }
@@ -533,29 +534,47 @@
 	    _createClass(Dungeon, [{
 	        key: 'add_room',
 	        value: function add_room(room, exit) {
+	            var add_to_room = arguments.length <= 2 || arguments[2] === undefined ? null : arguments[2];
+	
+	            var g_add_to_room = add_to_room;
 	            //add a new piece, exit is local perimeter pos for that exit;
 	            var choices = undefined,
 	                old_room = undefined,
 	                i = 0;
 	            while (true) {
 	                //pick a placed room to connect this piece to
-	                choices = this.get_open_pieces(this.children);
-	                if (choices) {
-	                    old_room = this.random.choose(choices);
-	                    //pick random perimeter piece if exit not specified
-	                    if (!exit) {
-	                        exit = this.random.choose(room.perimeter);
-	                    }
-	
-	                    //try joining the rooms
-	                    if (this.join(old_room, exit, room)) {
+	                if (add_to_room) {
+	                    old_room = add_to_room;
+	                    add_to_room = null;
+	                } else {
+	                    choices = this.get_open_pieces(this.children);
+	                    if (choices && choices.length) {
+	                        old_room = this.random.choose(choices);
+	                    } else {
+	                        console.log('ran out of choices connecting');
 	                        break;
 	                    }
 	                }
 	
+	                //if exit is specified, try joining  to this specific exit
+	                if (exit) {
+	                    //try joining the rooms
+	                    if (this.join(old_room, exit, room)) {
+	                        return true;
+	                    }
+	                    //else try all perims to see
+	                } else {
+	                        var perim = room.perimeter.slice();
+	                        while (perim.length) {
+	                            if (this.join(old_room, this.random.choose(perim, true), room)) {
+	                                return true;
+	                            }
+	                        }
+	                    }
+	
 	                if (i++ === 100) {
-	                    console.log('failed to connect 100 times :(');
-	                    break;
+	                    console.log('failed to connect 100 times :(', room, exit, g_add_to_room);
+	                    return false;
 	                }
 	            }
 	        }
@@ -673,7 +692,7 @@
 	                room = this.new_room(this.options.rooms.initial ? 'initial' : undefined),
 	                no_corridors = Math.round(this.corridor_density * no_rooms);
 	
-	            this.add_piece(room, this.get_center_pos());
+	            this.add_piece(room, this.options.rooms.initial && this.options.rooms.initial.position ? this.options.rooms.initial.position : this.get_center_pos());
 	
 	            var k = undefined;
 	
@@ -681,8 +700,14 @@
 	                k = this.random.int(1, no_rooms + no_corridors);
 	                if (k <= no_corridors) {
 	                    var corridor = this.new_corridor();
-	                    this.add_room(corridor, corridor.perimeter[0]);
+	                    var added = this.add_room(corridor, corridor.perimeter[0]);
 	                    no_corridors--;
+	
+	                    //try to connect to this corridor next
+	                    if (no_rooms > 0 && added) {
+	                        this.add_room(this.new_room(), null, corridor);
+	                        no_rooms--;
+	                    }
 	                } else {
 	                    this.add_room(this.new_room());
 	                    no_rooms--;

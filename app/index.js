@@ -4,7 +4,8 @@ import Dungeon from '../src/generators/dungeon';
 let editor;
 
 const COLOR_EMPTY = '#FFFF80',
-      COLOR_WALL = '#808080';
+      COLOR_WALL = '#808080',
+      COLOR_START_POS = 'red';
 
 function generate() {
     let code = editor.getValue(),
@@ -23,7 +24,7 @@ function generate() {
 
     for (let x = 0; x < dungeon.size[0]; x++) {
         for (let y = 0; y < dungeon.size[1]; y++) {
-            ctx.fillStyle = dungeon.walls.get([x, y]) ? COLOR_WALL : COLOR_EMPTY;
+            ctx.fillStyle = dungeon.start_pos && dungeon.start_pos[0] === x && dungeon.start_pos[1] === y ? COLOR_START_POS : (dungeon.walls.get([x, y]) ? COLOR_WALL : COLOR_EMPTY);
             ctx.fillRect(x * cell_width,  y * cell_width, cell_width, cell_width);
         }
     }
